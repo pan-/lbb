@@ -4,4 +4,3 @@ project("Lightweight building blocks")
 set(LIB_NAME "lbb")
 
 add_subdirectory(src)
-add_subdirectory(test)
