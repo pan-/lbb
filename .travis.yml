@@ -1,0 +1,45 @@
+language: python
+python:
+    '2.7'
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-6
+      - g++-6
+      - cmake
+
+before_install:
+  - bash -c "$STATUS" pending "Local $NAME testing is in progress"
+  # Make sure pipefail
+  - set -o pipefail
+  # Setup apt to cache
+  - mkdir -p $HOME/.cache/apt/partial
+  - sudo rm -rf /var/cache/apt/archives
+  - sudo ln -s $HOME/.cache/apt /var/cache/apt/archives
+  # Setup ppa to make sure arm-none-eabi-gcc is correct version
+  - sudo add-apt-repository -y ppa:team-gcc-arm-embedded/ppa
+  - sudo apt-get update -qq
+
+matrix:
+  include:
+    - env:
+        - NAME=ble-host-tests
+        - LBB=$PWD
+      install:
+        # Install dependencies
+        # - sudo apt-get install cmake
+        # Print versions we use
+        - gcc --version
+        - cmake --version
+      script:
+        # Compile the tests
+        - mkdir $LBB/build
+        - cd $LBB/build && cmake .. -G "Unix Makefiles"
+        - ls $LBB
+        - ls $LBB/build
+        - cd $LBB/build && make 
+        # Run ble host tests
+        - $LBB/build/test/test_lbb
