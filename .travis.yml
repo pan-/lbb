@@ -37,9 +37,9 @@ matrix:
       script:
         # Compile the tests
         - mkdir $LBB/build
-        - cd $LBB/build && CC=gcc-6 CXX=gcc-7 cmake .. -G "Unix Makefiles"
+        - cd $LBB/build && CC=gcc-6 CXX=g++-6 cmake .. -G "Unix Makefiles"
         - ls $LBB
         - ls $LBB/build
         - cd $LBB/build && make 
         # Run ble host tests
-        - $LBB/build/test/test_lbb
+        # - $LBB/build/test/test_lbb
